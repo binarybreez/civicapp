@@ -37,6 +37,10 @@
     ],
     "experiments": {
       "typedRoutes": true
+    },
+    "extra": {
+      "SUPABASE_URL": "https://oloxmwzlfxoqwkwccily.supabase.co",
+      "SUPABASE_KEY": "eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpc3MiOiJzdXBhYmFzZSIsInJlZiI6Im9sb3htd3psZnhvcXdrd2NjaWx5Iiwicm9sZSI6ImFub24iLCJpYXQiOjE3NTY5OTg0MDcsImV4cCI6MjA3MjU3NDQwN30.bMZ-iBiYY2QdW6xzjhLyQmRz42SkuMgDIF4p5ws8v58"
     }
   }
 }
