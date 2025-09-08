@@ -1,9 +1,10 @@
 import React from "react";
 import { View, Text, TextInput, TouchableOpacity } from "react-native";
-import { MaterialIcons } from "@expo/vector-icons";
+import { MaterialIcons, FontAwesome } from "@expo/vector-icons";
 import { SafeAreaView } from "react-native-safe-area-context";
 import FontAwesome6 from '@expo/vector-icons/FontAwesome6';
 import { Link } from "expo-router";
+
 
 const ForgotPasswordScreen = () => {
   return (
@@ -41,16 +42,12 @@ const ForgotPasswordScreen = () => {
             <Text className="text-sm font-medium text-[#111418] mb-2">
               Email Address
             </Text>
-            <View className="relative">
-              <MaterialIcons
-                name="mail"
-                size={20}
-                color="#617589"
-                style={{ position: "absolute", top: 24, left: 16, zIndex: 10 }}
-              />
+            <View className="flex-row items-center rounded-md border border-[#F0F2F4] bg-[#F0F2F4] px-2 gap-2">
+                        <FontAwesome name="phone-square" size={28} color="#9ca3af" />
+
               <TextInput
-                className="h-14 pl-12 pr-4 py-2 rounded-md border border-[#F0F2F4] bg-[#F0F2F4] text-[#111418] text-base"
-                placeholder="you@example.com"
+                className="h-14 pr-4 py-2 text-[#111418] text-base"
+                placeholder="Phone Number"
                 placeholderTextColor="#617589"
               />
             </View>

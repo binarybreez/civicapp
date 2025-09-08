@@ -3,8 +3,9 @@ import { SafeAreaView } from "react-native-safe-area-context";
 import { View, Text, TextInput, TouchableOpacity } from "react-native";
 import { Link } from 'expo-router';
 import FontAwesome5 from '@expo/vector-icons/FontAwesome5';
-import MaterialIcons from '@expo/vector-icons/MaterialIcons';
 import MaterialCommunityIcons from '@expo/vector-icons/MaterialCommunityIcons';
+import { FontAwesome } from "@expo/vector-icons";
+
 
 
 
@@ -21,12 +22,12 @@ const LoginScreen = () => {
 
           {/* Inputs */}
           < View className="space-y-6">
-            {/* Email */}
+            {/* Phone Number */}
             <View className="">
               < View className="flex-row items-center rounded-xl border border-gray-200 bg-white pl-4 gap-2">
-                <MaterialIcons name="email" size={24} color="#9ca3af" />
+          <FontAwesome name="phone-square" size={28} color="#9ca3af" />
               < TextInput
-                placeholder="Email"
+                placeholder="Phone Number"
                 className="h-14 pr-4 w-3/4 bg-white text-[#111418] text-base"
                 placeholderTextColor="#9ca3af"
               />
@@ -48,14 +49,14 @@ const LoginScreen = () => {
           </ View>
 
           {/* Forgot Password */}
-          < View className="mt-4 items-end">
+          {/* < View className="mt-4 items-end">
             <  TouchableOpacity>
               < Text className="text-sm font-medium text-[#1173d4]"><Link href={"/(auth)/forgot-password"}>Forgot Password?</Link></ Text>
             </  TouchableOpacity>
-          </ View>
+          </ View> */}
 
           {/* Buttons */}
-          < View className="mt-8 space-y-4">
+          < View className="mt-8 flex-col gap-4">
             {/* Login Button */}
             <  TouchableOpacity className="h-14 w-full flex-row gap-2 items-center justify-center rounded-xl bg-[#1173d4]">
             <MaterialCommunityIcons name="login-variant" size={24} color="white" />
@@ -71,7 +72,7 @@ const LoginScreen = () => {
 
             {/* OTP Button */}
             <  TouchableOpacity className="h-14 w-full items-center justify-center rounded-xl border border-gray-300 bg-white">
-              < Text className="text-base font-bold text-gray-700">Login with OTP</ Text>
+              < Text className="text-base font-bold text-gray-700"><Link href={"/(auth)/sign-in-otp"}>Login with OTP</Link></ Text>
             </  TouchableOpacity>
           </ View>
         </ View>
