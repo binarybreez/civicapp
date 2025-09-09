@@ -1,34 +1,117 @@
-import React, { useState } from "react";
+import React, { useEffect, useRef, useState } from "react";
 import {
   View,
   Text,
   TextInput,
   TouchableOpacity,
   ScrollView,
+  NativeSyntheticEvent,
+  TextInputKeyPressEventData,
+  ActivityIndicator,
+  Alert,
 } from "react-native";
 import { SafeAreaView } from "react-native-safe-area-context";
-import { Link } from "expo-router";
+import { Link, useRouter } from "expo-router";
 import FontAwesome from "@expo/vector-icons/FontAwesome";
-import MaterialIcons from "@expo/vector-icons/MaterialIcons";
+// import MaterialIcons from "@expo/vector-icons/MaterialIcons";
 import Ionicons from "@expo/vector-icons/Ionicons";
+import apiClient from "@/src/lib/apiclient";
+import { useAuth } from "@/src/context/authContext";
 
 const SignUp: React.FC = () => {
+  const router = useRouter();
   const [phone, setPhone] = useState("");
   const [fullname, setFullname] = useState("");
-  const [password, setPassword] = useState("");
+  // const [password, setPassword] = useState("");
   const [otp, setOtp] = useState(Array(6).fill(""));
   const [showOtpSection, setShowOtpSection] = useState(false);
+  const [loading, setLoading] = useState(false);
+  const [timer, setTimer] = useState(60);
+  const { login } = useAuth();
+
+  const inputsRef = useRef<Array<TextInput | null>>([]);
 
   const handleOtpChange = (index: number, value: string) => {
     const newOtp = [...otp];
     newOtp[index] = value.slice(0, 1);
     setOtp(newOtp);
+
+    if (value && index < otp.length - 1) {
+      inputsRef.current[index + 1]?.focus();
+    }
   };
 
-  const handleGetOtp = () => {
-    // Add your OTP sending logic here
-    setShowOtpSection(true);
+  const handleKeyPress = (
+    e: NativeSyntheticEvent<TextInputKeyPressEventData>,
+    index: number
+  ) => {
+    if (e.nativeEvent.key === "Backspace" && !otp[index] && index > 0) {
+      inputsRef.current[index - 1]?.focus();
+    }
   };
+
+  const handleGetOtp = async () => {
+    // Add your OTP sending logic here
+    try {
+      setLoading(true);
+      const response = await apiClient("/api/auth/send-otp", {
+        method: "POST",
+        body: {
+          phone: `+91${phone}`,
+        },
+      });
+      setShowOtpSection(true);
+      setTimer(60);
+      console.log(response);
+    } catch (error) {
+      console.log(error);
+    } finally {
+      setLoading(false);
+    }
+  };
+
+  useEffect(() => {
+    if (timer === 0) return;
+    const interval = setInterval(() => {
+      setTimer((prev) => prev - 1);
+    }, 1000);
+
+    return () => clearInterval(interval);
+  }, [timer]);
+
+  const handleCreateAccount = async () => {
+    const otpString = otp.join(""); // "123456"
+    console.log(otpString);
+
+    if (otpString.length < 6) {
+      Alert.alert("Incomplete OTP");
+      return;
+    }
+    try {
+      setLoading(true);
+      const response = await apiClient("/api/auth/verify-otp", {
+        method: "POST",
+        body: {
+          phone,
+          token: otpString,
+          full_name: fullname,
+          new:true
+        },
+      });
+      if (response.data?.session) {
+        console.log("Got session:", response.data.data.session);
+        await login(response.data.data.session); // saves in context + SecureStore
+        router.replace("/(protected)/dashboard");
+      } else {
+        console.log("no session in response")
+      }
+    } catch (error) {
+      console.log(error);
+    } finally {
+      setLoading(false);
+    }
+  };
+  const isOtpComplete = otp.every((digit) => digit !== "");
 
   return (
     <SafeAreaView className="flex-1 bg-gray-50">
@@ -126,7 +209,7 @@ const SignUp: React.FC = () => {
                     <FontAwesome name="user" size={24} color="#9ca3af" />
                     <TextInput
                       placeholder="e.g., Jane Doe"
-                      className="py-3 text-gray-900 placeholder-gray-400"
+                      className="py-3 text-gray-900 placeholder-gray-400 w-4/5"
                       placeholderTextColor="#9ca3af"
                       value={fullname}
                       onChangeText={setFullname}
@@ -139,7 +222,7 @@ const SignUp: React.FC = () => {
                 </View>
 
                 {/* Password */}
-                <View>
+                {/* <View>
                   <Text className="text-[13px] font-semibold text-gray-700 mb-1 mt-3">
                     Create Password
                   </Text>
@@ -157,16 +240,21 @@ const SignUp: React.FC = () => {
                   <Text className="mt-1 text-xs text-gray-500">
                     Must be at least 8 characters long.
                   </Text>
-                </View>
+                </View> */}
 
                 {/* Get OTP Button */}
                 <TouchableOpacity
                   onPress={handleGetOtp}
                   className="bg-[#1173d4] py-3 rounded-lg items-center mt-5"
                 >
-                  <Text className="text-white font-medium text-base">
-                    Get OTP
-                  </Text>
+                  <View className="flex-row items-center justify-center gap-2">
+                    {loading ? (
+                      <ActivityIndicator color="#fff" size={20} />
+                    ) : null}
+                    <Text className="text-white font-medium text-base">
+                      Get OTP
+                    </Text>
+                  </View>
                 </TouchableOpacity>
               </View>
             ) : (
@@ -182,19 +270,25 @@ const SignUp: React.FC = () => {
                   {otp.map((digit, i) => (
                     <TextInput
                       key={i}
+                      ref={(ref) => (inputsRef.current[i] = ref)}
                       maxLength={1}
                       keyboardType="number-pad"
                       className="w-12 h-14 text-center text-2xl font-semibold rounded-lg border border-gray-300"
                       value={digit}
                       onChangeText={(val) => handleOtpChange(i, val)}
+                      onKeyPress={(e) => handleKeyPress(e, i)}
                     />
                   ))}
                 </View>
 
                 <TouchableOpacity
-                  disabled
-                  className="mt-6 py-3 rounded-lg bg-gray-400 items-center"
+                  disabled={!isOtpComplete || loading}
+                  onPress={handleCreateAccount}
+                  className={`mt-6 py-3 rounded-lg ${isOtpComplete ? "bg-[#1173d4]" : "bg-gray-400"} items-center`}
                 >
+                  {loading ? (
+                    <ActivityIndicator color={"#fff"} size={26} />
+                  ) : null}
                   <Text className="text-white font-medium text-base">
                     Create Account
                   </Text>
@@ -202,9 +296,13 @@ const SignUp: React.FC = () => {
 
                 <Text className="mt-4 text-center text-sm text-gray-500">
                   Didn&apos;t receive the code?{" "}
-                  <Text className="font-medium text-[#1173d4] underline">
-                    Resend OTP
-                  </Text>
+                  <TouchableOpacity onPress={handleGetOtp} disabled={timer > 0}>
+                    <Text
+                      className={`font-medium ${timer > 0 ? "text-gray-400" : "text-[#1173d4]"} underline`}
+                    >
+                      {`Resend OTP 00:${timer}`}
+                    </Text>
+                  </TouchableOpacity>
                 </Text>
               </View>
             )}
