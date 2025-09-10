@@ -7,7 +7,7 @@ export default function AuthLayout() {
   if (loading) return null; // show splash screen maybe
 
   if (session) {
-    return <Redirect href="/(protected)/dashboard" />;
+    return <Redirect href="/(protected)/(tabs)" />;
   }
 
   return <Stack screenOptions={{ headerShown: false }} />;
