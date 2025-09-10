@@ -1,4 +1,4 @@
-import { Tabs, useNavigation } from "expo-router";
+import { Tabs } from "expo-router";
 import { Feather, Ionicons } from "@expo/vector-icons";
 import FontAwesome5 from "@expo/vector-icons/FontAwesome5";
 import FontAwesome6 from "@expo/vector-icons/FontAwesome6";
@@ -10,7 +10,6 @@ import { useAuth } from "@/src/context/authContext";
 
 const TabLayout = () => {
   const { logout } = useAuth();
-  const navigation = useNavigation();
 
   return (
     <Tabs
@@ -141,16 +140,6 @@ const TabLayout = () => {
             shadowRadius: 4,
             elevation: 2,
           },
-          headerLeft: () => {
-            return (
-              <TouchableOpacity
-                onPress={() => navigation.goBack()}
-                style={{ paddingLeft: 16 }}
-              >
-                <Ionicons name="arrow-back" size={24} color="#1F2937" />
-              </TouchableOpacity>
-            );
-          },
           tabBarLabelStyle: { fontWeight: "800" },
           tabBarIcon: ({ color }) => (
             <MaterialCommunityIcons
@@ -178,16 +167,6 @@ const TabLayout = () => {
             shadowOffset: { width: 0, height: 2 },
             shadowRadius: 4,
             elevation: 2,
-          },
-          headerLeft: () => {
-            return (
-              <TouchableOpacity
-                onPress={() => navigation.goBack()}
-                style={{ paddingLeft: 16 }}
-              >
-                <Ionicons name="arrow-back" size={24} color="#1F2937" />
-              </TouchableOpacity>
-            );
           },
           tabBarLabelStyle: { fontWeight: "800" },
           tabBarIcon: ({ color }) => (

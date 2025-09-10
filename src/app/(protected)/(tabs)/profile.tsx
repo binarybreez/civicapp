@@ -9,12 +9,12 @@ import {
   StyleSheet,
 } from "react-native";
 import { MaterialIcons } from "@expo/vector-icons";
+import { useRouter } from "expo-router";
 
 export default function App() {
   return (
     <View className="flex-1 bg-gray-50">
       <ScrollView contentContainerStyle={{ paddingBottom: 100 }}>
-
         {/* Main Content */}
         <View className="p-6">
           {/* Profile Card */}
@@ -94,10 +94,18 @@ export default function App() {
                 className="bg-white rounded-xl divide-y divide-gray-100"
                 style={[localStyles.shadow]}
               >
-                <OptionItem label="Change Password" />
-                <OptionItem label="Manage Notifications" />
-                <OptionItem label="Privacy Settings" />
-                <OptionItem label="Connected Accounts" />
+                <OptionItem
+                  label="Manage Notifications"
+                  path="/profile/AccountSettings/manageNotifications"
+                />
+                <OptionItem
+                  label="Privacy Settings"
+                  path="/profile/AccountSettings/privacySettings"
+                />
+                <OptionItem
+                  label="Connected Accounts"
+                  path="/profile/AccountSettings/connectedAccounts"
+                />
               </View>
             </View>
 
@@ -110,10 +118,19 @@ export default function App() {
                 className="bg-white rounded-xl divide-y divide-gray-100"
                 style={[localStyles.shadow]}
               >
-                <OptionItem label="FAQs & Help Center" />
-                <OptionItem label="About Us" />
-                <OptionItem label="Terms of Service" />
-                <OptionItem label="Privacy Policy" />
+                <OptionItem
+                  label="FAQs & Help Center"
+                  path="/profile/AppInfo/FAQs"
+                />
+                <OptionItem label="About Us" path="/profile/AppInfo/AboutUs" />
+                <OptionItem
+                  label="Terms of Service"
+                  path="/profile/AppInfo/TermsOService"
+                />
+                <OptionItem
+                  label="Privacy Policy"
+                  path="/profile/AppInfo/privacyPolicy"
+                />
               </View>
             </View>
           </View>
@@ -139,7 +156,7 @@ export default function App() {
 }
 
 // Reusable components
-const FloatingLabelInput = ({ label, ...props }) => {
+const FloatingLabelInput = ({ label, ...props }: { label: string }) => {
   return (
     <View className="relative" style={[localStyles.shadow]}>
       <Text className="absolute -top-2 left-3 bg-white px-1 text-xs text-gray-500 z-10">
@@ -153,14 +170,20 @@ const FloatingLabelInput = ({ label, ...props }) => {
   );
 };
 
-const OptionItem = ({ label }) => (
-  <TouchableOpacity className="flex-row items-center gap-4 p-4 min-h-14 justify-between active:bg-gray-50">
-    <Text className="text-gray-800 text-base font-medium leading-normal flex-1 truncate">
-      {label}
-    </Text>
-    <MaterialIcons name="chevron-right" size={24} color="#9CA3AF" />
-  </TouchableOpacity>
-);
+const OptionItem = ({ label, path }: { label: string; path: string }) => {
+  const router = useRouter();
+  return (
+    <TouchableOpacity
+      className="flex-row items-center gap-4 p-4 min-h-14 justify-between active:bg-gray-50"
+      onPress={() => router.push(`/(protected)${path}`)}
+    >
+      <Text className="text-gray-800 text-base font-medium leading-normal flex-1 truncate">
+        {label}
+      </Text>
+      <MaterialIcons name="chevron-right" size={24} color="#9CA3AF" />
+    </TouchableOpacity>
+  );
+};
 
 const localStyles = StyleSheet.create({
   shadow: {
