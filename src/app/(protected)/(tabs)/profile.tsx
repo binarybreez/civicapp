@@ -10,8 +10,10 @@ import {
 } from "react-native";
 import { MaterialIcons } from "@expo/vector-icons";
 import { useRouter } from "expo-router";
+import { useAuth } from "@/src/context/authContext";
 
 export default function App() {
+  const {session} = useAuth()
   return (
     <View className="flex-1 bg-gray-50">
       <ScrollView contentContainerStyle={{ paddingBottom: 100 }}>
@@ -36,10 +38,10 @@ export default function App() {
             </View>
             <View className="mt-4">
               <Text className="text-gray-900 text-2xl font-bold leading-tight tracking-tight">
-                Sophia Carter
+                {session?.user.full_name}
               </Text>
               <Text className="text-gray-500 text-base font-normal leading-normal">
-                sophia.carter@example.com
+                {session?.user.phone}
               </Text>
             </View>
           </View>
@@ -54,7 +56,7 @@ export default function App() {
               <View className="flex-col gap-4 rounded-xl p-4">
                 <FloatingLabelInput
                   label="Full Name"
-                  value="Sophia Carter"
+                  value={session?.user.full_name}
                   editable={true}
                 />
                 <FloatingLabelInput
@@ -66,6 +68,7 @@ export default function App() {
                 <FloatingLabelInput
                   label="Phone"
                   placeholder="Add phone number"
+                  defaultValue={session?.user.phone}
                   editable={true}
                   keyboardType="phone-pad"
                 />
@@ -98,14 +101,10 @@ export default function App() {
                   label="Manage Notifications"
                   path="/profile/AccountSettings/manageNotifications"
                 />
-                <OptionItem
-                  label="Privacy Settings"
-                  path="/profile/AccountSettings/privacySettings"
-                />
-                <OptionItem
+                {/* <OptionItem
                   label="Connected Accounts"
                   path="/profile/AccountSettings/connectedAccounts"
-                />
+                /> */}
               </View>
             </View>
 

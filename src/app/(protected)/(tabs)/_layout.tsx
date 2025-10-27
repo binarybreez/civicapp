@@ -91,30 +91,41 @@ const TabLayout = () => {
       <Tabs.Screen
         name="create"
         options={{
-          title: "",
-          tabBarLabelStyle: { fontWeight: "800" },
+          headerShown: true,
+          title: "Create",
+          headerTitleAlign: "center",
+          headerTitleStyle: {
+            fontSize: 20,
+            fontWeight: "700",
+          },
+          headerStyle: {
+            backgroundColor: "#ffffff",
+            shadowColor: "#000",
+            shadowOpacity: 0.05,
+            shadowOffset: { width: 0, height: 2 },
+            shadowRadius: 4,
+            elevation: 2,
+          },
 
-          headerShown: false,
-          tabBarIcon: ({ color }) => (
-            <Ionicons name="create" size={28} color={"white"} />
-          ),
           tabBarButton: (props) => (
             <TouchableOpacity
               {...props}
               activeOpacity={0.8}
-              className="items-center justify-center"
               style={{
-                top: -20, // Raise above tab bar
+                position: "absolute",
+                top: -20,
                 alignSelf: "center",
-                width: 64,
-                height: 64,
-                borderRadius: 32,
-                backgroundColor: "#1173d4", // Tailwind's blue-500
+                width: 70,
+                height: 70,
+                borderRadius: 35,
+                backgroundColor: "#1173d4",
+                alignItems: "center",
+                justifyContent: "center",
                 shadowColor: "#000",
-                shadowOpacity: 0.2,
+                shadowOpacity: 0.25,
                 shadowOffset: { width: 0, height: 4 },
-                shadowRadius: 10,
-                elevation: 6,
+                shadowRadius: 6,
+                elevation: 8,
               }}
             >
               <Ionicons name="create" size={28} color="white" />
@@ -122,6 +133,7 @@ const TabLayout = () => {
           ),
         }}
       />
+
       <Tabs.Screen
         name="my-reports"
         options={{

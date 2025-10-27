@@ -6,64 +6,47 @@ function BackButton() {
   const router = useRouter();
 
   return (
-    <Pressable
-      onPress={() => router.back()}
-      style={{ paddingHorizontal: 10 }}
-    >
+    <Pressable onPress={() => router.back()} style={{ paddingHorizontal: 10 }}>
       <Ionicons name="arrow-back" size={24} color="black" />
     </Pressable>
   );
 }
 
-export default function ProfileLayout() {
+export default function knowCityLayout() {
   return (
     <Stack
       screenOptions={{
         headerStyle: { backgroundColor: "white" }, // White background
         headerTintColor: "black", // Icons and back arrow color
         headerTitleStyle: { color: "black", fontWeight: "bold" }, // Title text color
-        headerTitleAlign:"center"
+        headerTitleAlign: "center",
       }}
     >
       <Stack.Screen
-        name="AccountSettings/manageNotifications"
+        name="emergency"
         options={{
-          headerTitle: "Manage Notifications",
+          headerTitle: "Emergency",
           headerLeft: () => <BackButton />,
         }}
       />
       <Stack.Screen
-        name="AccountSettings/privacySettings"
+        name="greenwaste"
         options={{
-          headerTitle: "Privacy Settings",
+          headerTitle: "Green Waste",
           headerLeft: () => <BackButton />,
         }}
       />
       <Stack.Screen
-        name="AppInfo/AboutUs"
+        name="noisepollution"
         options={{
-          headerTitle: "About Us",
+          headerTitle: "Noise Pollution",
           headerLeft: () => <BackButton />,
         }}
       />
       <Stack.Screen
-        name="AppInfo/FAQs"
+        name="index"
         options={{
-          headerTitle: "FAQs",
-          headerLeft: () => <BackButton />,
-        }}
-      />
-      <Stack.Screen
-        name="AppInfo/TermsOService"
-        options={{
-          headerTitle: "Terms of Service",
-          headerLeft: () => <BackButton />,
-        }}
-      />
-      <Stack.Screen
-        name="AppInfo/privacyPolicy"
-        options={{
-          headerTitle: "Privacy Policy",
+          headerTitle: "Know Your City",
           headerLeft: () => <BackButton />,
         }}
       />
