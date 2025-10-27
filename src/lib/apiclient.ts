@@ -1,4 +1,3 @@
-// apiClient.ts
 type HttpMethod = "GET" | "POST" | "PUT" | "DELETE" | "PATCH";
 
 interface ApiClientOptions {
@@ -14,7 +13,7 @@ interface ApiResponse<T> {
   error: { status: number; message: string } | null;
 }
 
-const API_BASE_URL = "https://703199f3dab6.ngrok-free.app"; // replace later
+const API_BASE_URL = "https://0c4da6285cf4.ngrok-free.app"; // replace later
 
 /**
  * Ensure phone numbers are always in E.164 format (+91XXXXXXXXXX for India).

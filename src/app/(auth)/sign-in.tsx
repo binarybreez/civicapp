@@ -92,11 +92,11 @@ export default function LoginScreen() {
           new: false,
         },
       });
-      console.log(response.data)
+      console.log(response.data.data)
       if (response.data?.data.session) {
-        console.log("Got session:", response.data.data.session);
+        console.log("Got session signin:", response.data.data.session);
         await login(response.data.data.session); // saves in context + SecureStore
-        router.replace("/(protected)/dashboard");
+        router.replace("/(protected)/(tabs)");
       } else {
         console.log("no session in response");
       }

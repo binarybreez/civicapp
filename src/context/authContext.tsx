@@ -1,5 +1,5 @@
 import React, { createContext, useContext, useEffect, useState } from "react";
-import * as SecureStore from 'expo-secure-store';
+import * as SecureStore from "expo-secure-store";
 import { supabase } from "../lib/supabase";
 
 type Session = {
@@ -14,6 +14,7 @@ type AuthContextType = {
   loading: boolean;
   login: (session: Session) => Promise<void>;
   logout: () => Promise<void>;
+  updateUser: (updatedUser: Partial<Session["user"]>) => Promise<void>;
 };
 
 const AuthContext = createContext<AuthContextType>({
@@ -21,6 +22,7 @@ const AuthContext = createContext<AuthContextType>({
   loading: true,
   login: async () => {},
   logout: async () => {},
+  updateUser: async () => {},
 });
 
 export const AuthProvider = ({ children }: { children: React.ReactNode }) => {
@@ -49,17 +51,34 @@ export const AuthProvider = ({ children }: { children: React.ReactNode }) => {
   }, []);
 
   useEffect(() => {
-  console.log("AuthContext session changed:", session);
-}, [session]);
-
+    console.log("AuthContext session changed:", session);
+  }, [session]);
 
   const login = async (newSession: any) => {
-    console.log("saving session :",newSession)
+    console.log("saving session :", newSession);
     setSession(newSession);
 
     await SecureStore.setItemAsync("access_token", newSession.access_token);
     await SecureStore.setItemAsync("refresh_token", newSession.refresh_token);
-    await SecureStore.setItemAsync("expires_at", newSession.expires_at.toString());
+    await SecureStore.setItemAsync(
+      "expires_at",
+      newSession.expires_at.toString()
+    );
+    await SecureStore.setItemAsync("user", JSON.stringify(newSession.user));
+  };
+
+  const updateUser = async (updatedUser: Partial<Session["user"]>) => {
+    if (!session) return;
+
+    const newSession = {
+      ...session,
+      user: {
+        ...session.user,
+        ...updatedUser, // merges updates like full_name
+      },
+    };
+
+    setSession(newSession);
     await SecureStore.setItemAsync("user", JSON.stringify(newSession.user));
   };
 
@@ -75,7 +94,9 @@ export const AuthProvider = ({ children }: { children: React.ReactNode }) => {
   };
 
   return (
-    <AuthContext.Provider value={{ session, loading, login, logout }}>
+    <AuthContext.Provider
+      value={{ session, loading, login, logout, updateUser }}
+    >
       {children}
     </AuthContext.Provider>
   );

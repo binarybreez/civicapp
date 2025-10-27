@@ -89,7 +89,7 @@ const SignUp: React.FC = () => {
     }
     try {
       setLoading(true);
-      const response = await apiClient("/api/auth/verify-otp", {
+      const {data, error} = await apiClient("/api/auth/verify-otp", {
         method: "POST",
         body: {
           phone,
@@ -98,10 +98,10 @@ const SignUp: React.FC = () => {
           new:true
         },
       });
-      if (response.data?.session) {
-        console.log("Got session:", response.data.data.session);
-        await login(response.data.data.session); // saves in context + SecureStore
-        router.replace("/(protected)/dashboard");
+      if (data?.data.session) {
+        console.log("Got session signup:", data.data.session);
+        await login(data.data.session); // saves in context + SecureStore
+        router.replace("/(protected)/(tabs)");
       } else {
         console.log("no session in response")
       }
