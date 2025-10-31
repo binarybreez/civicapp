@@ -92,7 +92,7 @@ const TabLayout = () => {
         name="create"
         options={{
           headerShown: true,
-          title: "Create",
+          title: "Register Complaint",
           headerTitleAlign: "center",
           headerTitleStyle: {
             fontSize: 20,

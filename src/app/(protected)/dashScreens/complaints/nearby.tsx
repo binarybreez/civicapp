@@ -1,13 +1,11 @@
+import { FontAwesome5, MaterialIcons } from '@expo/vector-icons';
 import React from 'react';
-import { View, Text, ScrollView, TouchableOpacity, Image } from 'react-native';
-import { MaterialIcons, FontAwesome5 } from '@expo/vector-icons';
+import { Image, ScrollView, Text, TouchableOpacity, View } from 'react-native';
 
 // --- CUSTOM COLORS (Must be configured in tailwind.config.js for classNames to work) ---
 // Using custom primary color from the HTML: #0284c7 (primary-600)
-const PRIMARY_600 = '#0284c7';
 const GRAY_700 = '#4b5563';
-const GRAY_900 = '#111827';
-const TEXT_GRAY_500 = '#6b7280';
+
 
 // --- DATA STRUCTURE FOR REUSABILITY ---
 const complaintsData = [
@@ -60,6 +58,24 @@ const complaintsData = [
 
 // --- REUSABLE COMPONENTS ---
 
+const StatusLabel = ({status}:{status:string}) => {
+    let colors 
+    if(status==='Resolved'){
+        colors = "bg-green-100 text-green-800"
+    } else if (status==="Assigned"){
+        colors = "bg-blue-100 text-blue-800"
+    } else if(status==="Pending"){
+        colors = "bg-yellow-100 text-yellow-800"
+    }
+
+    return (
+    <View>
+        <Text className={`px-2.5 py-0.5 rounded-full text-xs font-medium text-center ${colors} w-[75px]`}>{status}</Text>
+    </View>
+    )
+}
+
+
 // Component for a single complaint card
 const ComplaintCard = ({ data }) => (
     <View className="bg-white rounded-xl shadow-sm overflow-hidden">
@@ -88,9 +104,7 @@ const ComplaintCard = ({ data }) => (
                         <MaterialIcons name="location-on" size={14} className="text-sm mr-1" />
                         <Text className="text-sm text-gray-600">{data.location}</Text>
                     </View>
-                    <Text className={`inline-flex items-center px-2.5 py-0.5 rounded-full text-xs font-medium ${data.statusBg} ${data.statusText}`}>
-                        {data.status}
-                    </Text>
+                    <StatusLabel status={data.status}/>
                 </View>
 
                 {/* Right Section (Image) */}
@@ -159,36 +173,6 @@ const ComplaintsScreen = () => {
                     <ComplaintCard key={5} data={{...complaintsData[1], id: 5, title: "Blocked Drain on River Road", location: "River Road", time: "1 day ago"}} />
                     <View className="h-4" /> {/* Extra spacing at bottom of scroll view */}
                 </ScrollView>
-
-                {/* Footer (Fixed at the bottom) */}
-                <View className="bg-white border-t border-gray-200 shadow-t-sm">
-                    <View className="flex flex-row justify-around items-center h-16">
-                        {/* Home */}
-                        <TouchableOpacity className="flex flex-col items-center justify-center flex-1" onPress={() => handlePress("Home")}>
-                            <MaterialIcons name="home" size={24} style={{ color: PRIMARY_600 }} />
-                            <Text className="text-xs font-medium" style={{ color: PRIMARY_600 }}>Home</Text>
-                        </TouchableOpacity>
-                        {/* Map */}
-                        <TouchableOpacity className="flex flex-col items-center justify-center flex-1" onPress={() => handlePress("Map")}>
-                            <MaterialIcons name="map" size={24} style={{ color: TEXT_GRAY_500 }} />
-                            <Text className="text-xs font-medium" style={{ color: TEXT_GRAY_500 }}>Map</Text>
-                        </TouchableOpacity>
-                        {/* Add/Plus */}
-                        <TouchableOpacity className="flex flex-col items-center justify-center flex-1" onPress={() => handlePress("Add")}>
-                            <MaterialIcons name="add-circle" size={32} style={{ color: TEXT_GRAY_500 }} />
-                        </TouchableOpacity>
-                        {/* Reports */}
-                        <TouchableOpacity className="flex flex-col items-center justify-center flex-1" onPress={() => handlePress("Reports")}>
-                            <MaterialIcons name="description" size={24} style={{ color: TEXT_GRAY_500 }} />
-                            <Text className="text-xs font-medium" style={{ color: TEXT_GRAY_500 }}>Reports</Text>
-                        </TouchableOpacity>
-                        {/* Profile */}
-                        <TouchableOpacity className="flex flex-col items-center justify-center flex-1" onPress={() => handlePress("Profile")}>
-                            <MaterialIcons name="person" size={24} style={{ color: TEXT_GRAY_500 }} />
-                            <Text className="text-xs font-medium" style={{ color: TEXT_GRAY_500 }}>Profile</Text>
-                        </TouchableOpacity>
-                    </View>
-                </View>
             </View>
         </View>
     );

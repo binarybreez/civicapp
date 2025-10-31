@@ -13,7 +13,7 @@ import { useRouter } from "expo-router";
 import { useAuth } from "@/src/context/authContext";
 
 export default function App() {
-  const {session} = useAuth()
+  const { session } = useAuth();
   return (
     <View className="flex-1 bg-gray-50">
       <ScrollView contentContainerStyle={{ paddingBottom: 100 }}>
@@ -40,14 +40,14 @@ export default function App() {
               <Text className="text-gray-900 text-2xl font-bold leading-tight tracking-tight">
                 {session?.user.full_name}
               </Text>
-              <Text className="text-gray-500 text-base font-normal leading-normal">
+              <Text className="text-gray-500 text-center text-base font-normal leading-normal">
                 {session?.user.phone}
               </Text>
             </View>
           </View>
 
           {/* Forms and Settings */}
-          <View className="mt-10 space-y-8">
+          <View className="mt-10 flex-col gap-8">
             {/* Personal Information Section */}
             <View>
               <Text className="text-gray-500 text-sm font-semibold uppercase tracking-wider px-1 pb-4">
@@ -58,12 +58,6 @@ export default function App() {
                   label="Full Name"
                   value={session?.user.full_name}
                   editable={true}
-                />
-                <FloatingLabelInput
-                  label="Email"
-                  value="sophia.carter@example.com"
-                  editable={true}
-                  keyboardType="email-address"
                 />
                 <FloatingLabelInput
                   label="Phone"

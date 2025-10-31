@@ -13,7 +13,7 @@ export default function App() {
         <View className="bg-white px-6 pt-6 pb-6 shadow-sm flex-row items-center justify-between">
           <View>
             <Text className="text-base text-gray-500">Welcome back,</Text>
-            <Text className="text-3xl font-bold text-gray-900">
+            <Text className="text-xl font-bold text-gray-900">
               {session?.user.full_name}
             </Text>
           </View>
